@@ -53,7 +53,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>kas-domotic-hub</finalName>
+		<finalName>domotic-hub</finalName>
 		<plugins>
 
 			<!-- Compiler -->
