@@ -1,0 +1,14 @@
+create table humidity_measure (id varchar(255) not null, measure_time datetime, value double precision, request_id varchar(255), station_id varchar(255), primary key (id));
+create table light_measure (id varchar(255) not null, measure_time datetime, value double precision, request_id varchar(255), station_id varchar(255), primary key (id));
+create table pressure_measure (id varchar(255) not null, measure_time datetime, value double precision, request_id varchar(255), station_id varchar(255), primary key (id));
+create table request (id varchar(255) not null, request_time datetime, response_time datetime, type varchar(255), primary key (id));
+create table station (id varchar(255) not null, latitude double precision, longitude double precision, mac_address varchar(255), name varchar(255), url varchar(255), primary key (id));
+create table temperature_measure (id varchar(255) not null, measure_time datetime, value double precision, position varchar(255), request_id varchar(255), station_id varchar(255), primary key (id));
+alter table humidity_measure add constraint FKmbwefbwbjcnm9ly7tj401yr2r foreign key (request_id) references request (id);
+alter table humidity_measure add constraint FKno37qut13l9lw20tftft3qnu0 foreign key (station_id) references station (id);
+alter table light_measure add constraint FKdnjyv6f61hyuovp5mlg1g56jg foreign key (request_id) references request (id);
+alter table light_measure add constraint FKm8qs03u11o4h2epq4awty9xsy foreign key (station_id) references station (id);
+alter table pressure_measure add constraint FKfrpjdvipn5v5sf9u65ckiqod4 foreign key (request_id) references request (id);
+alter table pressure_measure add constraint FK92gw7fh2e8pxbcsm5fx1pvva2 foreign key (station_id) references station (id);
+alter table temperature_measure add constraint FKtae9btphnhf6b1sfdvfss5vsp foreign key (request_id) references request (id);
+alter table temperature_measure add constraint FKqguob2w1i07g7q3u7s9ob9g8w foreign key (station_id) references station (id);

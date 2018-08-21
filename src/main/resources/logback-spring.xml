@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+	<springProfile name="dev">
+		
+		<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+			<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+				<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			</encoder>
+		</appender>
+		<appender name="FILE"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>/tmp/logs/domotic/domotic_hub.log</file>
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<!-- daily rollover -->
+				<fileNamePattern>/tmp/logs/domotic/domotic_hub.%d{yyyy-MM-dd}.log</fileNamePattern>
+				<!-- keep 7 days' worth of history capped at 1GB total size -->
+				<maxHistory>7</maxHistory>
+				<totalSizeCap>20MB</totalSizeCap>
+			</rollingPolicy>
+			<encoder>
+				<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			</encoder>
+		</appender>
+
+		<logger name="com.kas" level="debug" />
+
+		<root level="info">
+			<appender-ref ref="FILE" />
+			<appender-ref ref="CONSOLE" />
+		</root>
+	</springProfile>
+	<springProfile name="preprod,prod">
+		<appender name="FILE"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+			<file>${CATALINA_HOME}/logs/domotic_hub.log</file>
+			<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+				<!-- daily rollover -->
+				<fileNamePattern>${CATALINA_HOME}/logs/domotic_hub.%d{yyyy-MM-dd}.log</fileNamePattern>
+				<!-- keep 7 days' worth of history capped at 1GB total size -->
+				<maxHistory>7</maxHistory>
+				<totalSizeCap>20MB</totalSizeCap>
+			</rollingPolicy>
+			<encoder>
+				<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+			</encoder>
+		</appender>
+
+		<root level="info">
+			<appender-ref ref="FILE" />
+		</root>
+	</springProfile>
+
+
+</configuration>
