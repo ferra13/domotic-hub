@@ -1,5 +1,7 @@
 package com.kas.domotic.application.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,5 +26,11 @@ public class StationController {
 	public String createStation(@RequestBody StationDTO dto) {
 		Station registeredStation = stationService.registerStation(dto);
 		return registeredStation.id();
+	}
+	
+	@CrossOrigin 
+	public List<StationDTO> getStations(@RequestBody StationDTO dto) {
+		
+		return stationService.getAll();
 	}
 }

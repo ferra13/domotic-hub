@@ -1,23 +1,24 @@
 package com.kas.domotic.application.service;
 
-import com.google.common.collect.ImmutableList;
 import com.kas.domotic.application.service.dto.MeasureDTO;
+import com.kas.domotic.application.service.dto.PageDTO;
 import com.kas.domotic.domain.measure.Position;
 
 public interface MeasureService {
 
-	public ImmutableList<MeasureDTO> getAllMeasure();
+	//Nonsense with multi device
+	//public PageDTO<MeasureDTO> getAllMeasure(PageParams params);
 	
 	public MeasureDTO getMeasure(String id);
 
-	public ImmutableList<MeasureDTO> getAllTemperature();
+	public PageDTO<MeasureDTO> getAllTemperature(PageParams params);
 	
-	public ImmutableList<MeasureDTO> getAllTemperature(Position position);
+	public PageDTO<MeasureDTO> getAllTemperature(Position position, PageParams params);
 
-	public ImmutableList<MeasureDTO> getAllUmidity();
+	public PageDTO<MeasureDTO> getAllUmidity(PageParams params);
 
-	public ImmutableList<MeasureDTO> getAllPressure();
+	public PageDTO<MeasureDTO> getAllPressure(PageParams params);
 	
-	public ImmutableList<MeasureDTO> getAllLight();
+	public PageDTO<MeasureDTO> getAllLight(PageParams params);
 	
 }
