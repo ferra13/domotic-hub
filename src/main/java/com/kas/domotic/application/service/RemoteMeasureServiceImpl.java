@@ -2,6 +2,8 @@ package com.kas.domotic.application.service;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,7 +75,7 @@ public class RemoteMeasureServiceImpl implements RemoteMeasureService {
 		ArduinoRequest measures = arduino.readMeasure();
 		if (measures != null) {
 			ObjectMapper mapper = new ObjectMapper();
-			JsonNode node = null;
+			JsonNode node;
 			try {
 				node = mapper.readTree(measures.content());
 				final LocalDateTime now = LocalDateTime.now();
@@ -104,8 +106,6 @@ public class RemoteMeasureServiceImpl implements RemoteMeasureService {
 				}
 			} catch (JsonProcessingException e) {
 				LOGGER.error("Error processing Json String: " + measures, e);
-			} catch (IOException e) {
-				LOGGER.error("Error during parsing Json String", e);
 			}
 			return "ok";
 		} else {
@@ -120,11 +120,15 @@ public class RemoteMeasureServiceImpl implements RemoteMeasureService {
 	@Override
 	@Transactional(readOnly=true)
 	public ImmutableList<MeasureDTO> getCurrentMeasure(String stationId) {
-		Station currentStation = stationRepo.findOne(stationId);
+		Optional<Station> station = stationRepo.findById(stationId);
+		if(station.isEmpty()) {
+			return null;
+		}
+		Station currentStation = station.get();
 		ArduinoRequest measures = arduino.readMeasure();
 		if(measures != null) {
 			ObjectMapper mapper = new ObjectMapper();
-			JsonNode node = null;
+			JsonNode node;
 			ImmutableList.Builder<MeasureDTO> currentMeasures = ImmutableList.builder();
 			try {
 				LocalDateTime now = LocalDateTime.now();
@@ -132,7 +136,7 @@ public class RemoteMeasureServiceImpl implements RemoteMeasureService {
 				node.forEach(m -> {
 					try {
 						RemoteMeasureDTO dto = mapper.treeToValue(m, RemoteMeasureDTO.class);
-						currentMeasures.add(MeasureAssembler.fromMeasure(RemoteMeasureAssembler.fromDto(dto, now, measures.request(), currentStation)));
+						currentMeasures.add(Objects.requireNonNull(MeasureAssembler.fromMeasure(RemoteMeasureAssembler.fromDto(dto, now, measures.request(), currentStation))));
 					} catch (JsonProcessingException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -141,8 +145,6 @@ public class RemoteMeasureServiceImpl implements RemoteMeasureService {
 				return currentMeasures.build();
 			} catch (JsonProcessingException e) {
 				LOGGER.error("Error processing Json String: " + measures, e);
-			} catch (IOException e) {
-				LOGGER.error("Error during parsing Json String", e);
 			}
 		}
 		

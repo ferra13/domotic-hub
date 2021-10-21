@@ -1,6 +1,7 @@
 package com.kas.domotic.application.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,7 @@ public class StationServiceImpl implements StationService {
 	
 	@Override
 	public Station registerStation(StationDTO dto) {
-		Station stationFound = null;
+		Station stationFound;
 		if(dto.getLatitude() != null && dto.getLongitude() != null) {
 			stationFound = stationRepository.findByNameAndLatitudeAndLongitude(dto.getName(), dto.getLatitude(), dto.getLongitude());
 		} else {
@@ -41,15 +42,14 @@ public class StationServiceImpl implements StationService {
 
 	@Override
 	public StationDTO get(String stationId) {
-		return StationAssembler.fromStation(stationRepository.findOne(stationId));
+		Optional<Station> station = stationRepository.findById(stationId);
+		return station.map(StationAssembler::fromStation).orElse(null);
 	}
 
 	@Override
 	public List<StationDTO> getAll() {
 		ImmutableList.Builder<StationDTO> sBuilder = ImmutableList.builder();
-		stationRepository.findAll().forEach(s -> {
-			sBuilder.add(StationAssembler.fromStation(s));
-		});
+		stationRepository.findAll().forEach(s -> sBuilder.add(StationAssembler.fromStation(s)));
 		return sBuilder.build();
 		
 	}

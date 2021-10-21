@@ -25,11 +25,11 @@ public class PageParams {
 	}
 	
 	public Sort getSort() {
-		return new Sort(direction, columnName);
+		return Sort.by(direction, columnName);
 	}
 	
 	public PageRequest getPageRequest() {
-		return new PageRequest(page, size, direction, columnName);
+		return PageRequest.of(page, size, direction, columnName);
 	}
 	
 	public int page() {
