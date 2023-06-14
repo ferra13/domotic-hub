@@ -9,7 +9,7 @@
 
 	<properties>
 		<spring.boot.version>2.5.5</spring.boot.version>
-		<guava.version>31.0.1-jre</guava.version>
+		<guava.version>32.0.0-jre</guava.version>
 		<java.version>11</java.version>
 		<hibernate.version>5.5.8.Final</hibernate.version>
 		<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
